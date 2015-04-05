@@ -1,0 +1,23 @@
+{
+  "name": "PlayStation Store Plus",
+  "description": "Better download list.",
+  "version": "1.0",
+  "author": "Gordian Zhang",
+  "permissions": [
+	"tabs",
+	"https://store.playstation.com/*"
+  ],
+  "page_action": {
+      "default_title": "PlayStation Store Plus",
+      "default_icon": "icon-19.png"
+  },
+  "background": {
+	"scripts": ["background.js"],
+	"persistent": false
+  },
+  "icons" : {
+    "48" : "icon-48.png",
+    "128" : "icon-128.png"
+  },
+  "manifest_version": 2
+}
