@@ -1,9 +1,6 @@
-var contentTabId;
-
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
 	if (tab.url.indexOf('https://store.playstation.com') === 0) {
 		chrome.pageAction.show(tabId);
-		contentTabId = tabId;
 	}
 });
 
@@ -16,7 +13,7 @@ chrome.pageAction.onClicked.addListener(function(tab) {
 			popup.id, {
 				from: 'background',
 				subject: 'ContentTabId',
-				id: contentTabId
+				id: tab.id
 			});
 	});
 });
