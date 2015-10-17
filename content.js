@@ -7,4 +7,5 @@ chrome.runtime.onMessage.addListener(function(message, sender, response) {
 			response(null);
 		}
 	}
+	console.log(KamajiPlatformFlags);
 });
