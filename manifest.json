@@ -5,6 +5,7 @@
   "author": "Gordian Zhang",
   "permissions": [
 		"tabs",
+    "storage",
 		"https://store.playstation.com/*"
   ],
   "page_action": {
