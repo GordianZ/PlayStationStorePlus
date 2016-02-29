@@ -52,4 +52,4 @@ function linkfy(id) {
 	return '<a href="https://store.playstation.com/#!/cid=' + id + '">' + id + '</a>';
 }
 
-// refresh();
+renderData();
