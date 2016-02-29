@@ -1,6 +1,8 @@
-// document.getElementById('toggleInternal').onchange = function(){toggleRow('Internal')};
-// document.getElementById('togglePS4').onchange = function(){toggleRow('PS4')};
-// document.getElementById('togglePS3').onchange = function(){toggleRow('PS3')};
+document.getElementById('toggleLicense').onchange = function(){toggleRow('License')};
+document.getElementById('togglePS4').onchange = function(){toggleRow('PS4')};
+document.getElementById('togglePS3').onchange = function(){toggleRow('PS3')};
+document.getElementById('togglePSVita').onchange = function(){toggleRow('PSVita')};
+document.getElementById('togglePSP').onchange = function(){toggleRow('PSP')};
 // document.getElementById('refresh').onclick = renderData();
 
 function renderData() {
@@ -25,6 +27,7 @@ function renderData() {
 			dateCell.innerHTML = item.date;
 			var idCell = row.insertCell(-1);
 			idCell.innerHTML = linkfy(item.id);
+			row.setAttribute('class', item.platform);
 		};
 		sorttable.makeSortable(contentTable);
 	});
@@ -34,7 +37,7 @@ function toggleRow(rowClass) {
 	var toggle = document.getElementById('toggle' + rowClass).checked;
 	var rows = document.getElementsByClassName(rowClass);
 	for (var i = 0; i < rows.length; i++) {
-		rows[i].style.display = toggle ? 'none' : 'table-row';
+		rows[i].style.display = toggle ? 'table-row' : 'none';
 		// console.log(rows[i]);
 	}
 };

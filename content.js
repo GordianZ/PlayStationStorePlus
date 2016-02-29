@@ -15,8 +15,8 @@ if (typeof localStorage['MgrEntitlements|chihiro.entitlements'] !== 'undefined')
 };
 
 function parseEntitlement(entitlement) {
-	var platformFlags = [2147483648, 1073741824, 536870912, 268435456, 134217728, 0, 0, 0, 0];
-	var platformNames = ["PS3", "PSP", "Media Go", "Xperia", "PS Vita", "Sony Tablet", "BIVL", "Chihiro", "Generic Mobile"];
+	var platformFlags = [2147483648, 1073741824, 0, 0, 134217728, 0, 0, 0, 0];
+	var platformNames = ["PS3", "PSP", "MediaGo", "Xperia", "PSVita", "Sony Tablet", "BIVL", "Chihiro", "Generic Mobile"];
 
 	var item = {
 		"name": "__ENTITLEMENT__",
@@ -40,7 +40,7 @@ function parseEntitlement(entitlement) {
 	}
 
 	if (entitlement.entitlement_attributes) {
-		item.platform = entitlement.entitlement_attributes[0].platform_id.toUpperCase();
+		item.platform = "PS4";
 		item.size = entitlement.entitlement_attributes[0].package_file_size;
 	}
 
