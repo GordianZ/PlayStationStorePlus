@@ -1,16 +1,12 @@
-document.getElementById('toggleLicense').onchange = function(){toggleRow('License')};
-document.getElementById('togglePS4').onchange = function(){toggleRow('PS4')};
-document.getElementById('togglePS3').onchange = function(){toggleRow('PS3')};
-document.getElementById('togglePSVita').onchange = function(){toggleRow('PSVita')};
-document.getElementById('togglePSP').onchange = function(){toggleRow('PSP')};
+var contentTable = document.getElementById('content');
+var checkboxes = document.getElementsByClassName('checkbox');
+
 // document.getElementById('refresh').onclick = renderData();
 
 function renderData() {
 	chrome.storage.local.get(null, function(items){
 		document.getElementById('number').textContent = items.count;
-		var contentTable = document.getElementById('content');
-		var length = items.count;
-		for (var i = 0; i < length; i++) {
+		for (var i = 0; i < items.count; i++) {
 			var item = items.entitlements[i];
 			var row = contentTable.insertRow(-1);
 			var noCell = row.insertCell(-1);
@@ -40,21 +36,44 @@ function renderData() {
 			contentTag: '#content > tbody',
 			columns: [1, 2, 3, 5, 6]
 		});
+
+		for (var i = 0; i < checkboxes.length; i++) {
+			checkboxes[i].checked = items.toggles[i];
+			checkboxes[i].addEventListener('change', filterPlatforms);
+		}
+		toggleRows();
 	});
 }
 
-function toggleRow(rowClass) {
-	var toggle = document.getElementById('toggle' + rowClass).checked;
-	var rows = document.getElementsByClassName('type--' + rowClass.toLowerCase());
-	for (var i = 0; i < rows.length; i++) {
-		rows[i].style.display = toggle ? 'table-row' : 'none';
-		// console.log(rows[i]);
+function filterPlatforms() {
+	var checkboxVals = [];
+	for (var i = 0; i < checkboxes.length; i++) {
+		checkboxVals.push(checkboxes[i].checked);
 	}
+	console.log(checkboxVals);
+	chrome.storage.local.set({'toggles': checkboxVals});
+	toggleRows();
 }
 
+function toggleRows() {
+	chrome.storage.local.get('toggles', function(platform) {
+		if (chrome.runtime.lastError) {
+			console.log(chrome.runtime.lastError.message);
+			return;
+		}
+		var platformClasses = ['type--license', 'type--ps4', 'type--ps3', 'type--psvita', 'type--psp'];
+		var rows = document.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+		console.log(rows.length);
+		for (var i = 0; i < rows.length; i++) {
+			var toggle = platform.toggles[platformClasses.indexOf(rows[i].className)];
+			rows[i].style.display = toggle ? '' : 'none';
+			// console.log(rows[i]);
+		}
+	});
+}
 
 function formatSize(bytes) {
-	if (typeof bytes !== "number") return bytes;
+	if (typeof bytes !== 'number') return bytes;
 	if (bytes > 1073741824) return (bytes/1073741824).toFixed(2) + ' GB';
 	if (bytes > 1048576) return (bytes/1048576).toFixed(2) + ' MB';
 	if (bytes > 1024) return (bytes/1024).toFixed(2) + ' kB';
