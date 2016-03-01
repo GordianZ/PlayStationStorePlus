@@ -14,6 +14,7 @@ function renderData() {
 			var item = items.entitlements[i];
 			var row = contentTable.insertRow(-1);
 			var noCell = row.insertCell(-1);
+			noCell.setAttribute('class', 'no');
 			noCell.innerHTML = i;
 			var nameCell = row.insertCell(-1);
 			nameCell.innerHTML = item.name;
@@ -29,7 +30,7 @@ function renderData() {
 			var idCell = row.insertCell(-1);
 			idCell.innerHTML = linkfy(item.id);
 			idCell.setAttribute('class', 'monospace');
-			row.setAttribute('class', item.platform);
+			row.setAttribute('class', item.platform.toLowerCase());
 		}
 		sorttable.makeSortable(contentTable);
 	});

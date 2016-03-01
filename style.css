@@ -7,6 +7,8 @@ body {
 	padding: 1vw;
 	font-family: "Helvetica Neue", Arial, sans-serif;
 	font-size: 14px;
+	color: #000;
+	background: #fff;
 }
 
 table {
@@ -36,6 +38,10 @@ td {
 tbody tr:hover,
 tbody tr:focus {
 	background: rgba(0, 0, 0, .04);
+}
+
+.no {
+	color: #999;
 }
 
 .monospace {
