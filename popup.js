@@ -34,6 +34,12 @@ function renderData() {
 			row.setAttribute('class', 'type--' + item.platform.toLowerCase());
 		}
 		sorttable.makeSortable(contentTable);
+
+		var jets = new Jets({
+			searchTag: '#inputSearch',
+			contentTag: '#content > tbody',
+			columns: [1, 2, 3, 5, 6]
+		});
 	});
 }
 

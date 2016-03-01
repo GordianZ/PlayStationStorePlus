@@ -1,11 +1,15 @@
 <html>
 	<head>
 		<title>PlayStation Store Plus</title>
-		<script src="sorttable.js"></script>
+		<script src="vendors/sorttable.js"></script>
+		<script src="vendors/jets.min.js"></script>
 		<link rel="stylesheet" href="style.css">
 	</head>
 <body>
   <div>Total number: <em id="number"></em></div>
+	<div>
+		<input type="search" id="inputSearch" placeholder="Filter result…">
+	</div>
 	<div>
 		<input type="checkbox" id="toggleLicense" checked="true">
 		<label for="toggleLicense">Show Internal License</label>
@@ -18,7 +22,6 @@
 		<input type="checkbox" id="togglePSP" checked="true">
 		<label for="togglePSP">Show PSP</label>
 	</div>
-	<!-- <div><input type="search" id="inputSearch">Instant filter</div> -->
   <table id="content">
 	  <tr>
 			<th>#</th>
