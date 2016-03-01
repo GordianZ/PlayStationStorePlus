@@ -48,3 +48,9 @@ tbody tr:focus {
 	font-family: Menlo, Consolas, monospace;
 	font-size: .9rem;
 }
+
+.type--license .platform { color: #a4a4a4; }
+.type--ps3     .platform { color: #3899e8; }
+.type--ps4     .platform { color: #e44747; }
+.type--psvita  .platform { color: #f18f34; }
+.type--psp     .platform { color: #3fc18e; }

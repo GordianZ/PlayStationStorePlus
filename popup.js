@@ -20,6 +20,7 @@ function renderData() {
 			nameCell.innerHTML = item.name;
 			var platformCell = row.insertCell(-1);
 			platformCell.innerHTML = item.platform;
+			platformCell.setAttribute('class', 'platform');
 			var typeCell = row.insertCell(-1);
 			typeCell.innerHTML = item.type;
 			var sizeCell = row.insertCell(-1);
@@ -30,7 +31,7 @@ function renderData() {
 			var idCell = row.insertCell(-1);
 			idCell.innerHTML = linkfy(item.id);
 			idCell.setAttribute('class', 'monospace');
-			row.setAttribute('class', item.platform.toLowerCase());
+			row.setAttribute('class', 'type--' + item.platform.toLowerCase());
 		}
 		sorttable.makeSortable(contentTable);
 	});
