@@ -1,3 +1,4 @@
+chrome.storage.local.clear();
 if (typeof localStorage['MgrEntitlements|chihiro.entitlements'] !== 'undefined') {
 	// Get raw entitlements string from PSStore local storage
 	var rawEntitlements = JSON.parse(localStorage['MgrEntitlements|chihiro.entitlements']);
