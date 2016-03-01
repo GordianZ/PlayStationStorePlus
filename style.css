@@ -1,7 +1,44 @@
+* {
+	padding: 0;
+	margin: 0;
+}
+
+body {
+	padding: 1vw;
+	font-family: "Helvetica Neue", Arial, sans-serif;
+	font-size: 14px;
+}
+
+table {
+	border-spacing: 0;
+	border-collapse: collapse;
+	width: 100%;
+	margin-bottom: 1em;
+}
+
+th,
+td {
+	padding: .4em .4em;
+}
+
 th {
-		background-color:#eee;
-		color:#666666;
-		font-weight: bold;
-		cursor: pointer;
-	}
-	
+	text-align: left;
+	background: rgba(0, 0, 0, .04);
+	border-bottom: 2px solid rgba(0, 0, 0, .06);
+	font-weight: bold;
+	cursor: pointer;
+}
+
+td {
+	border-top: 1px solid rgba(0, 0, 0, .04);
+}
+
+tbody tr:hover,
+tbody tr:focus {
+	background: rgba(0, 0, 0, .04);
+}
+
+.monospace {
+	font-family: Menlo, Consolas, monospace;
+	font-size: .9rem;
+}
