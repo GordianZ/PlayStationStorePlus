@@ -9,7 +9,8 @@ function renderData() {
 	chrome.storage.local.get(null, function(items){
 		document.getElementById('number').textContent = items.count;
 		var contentTable = document.getElementById('content');
-		for (var i = 0; i < items.count; i++) {
+		var length = items.count;
+		for (var i = 0; i < length; i++) {
 			var item = items.entitlements[i];
 			var row = contentTable.insertRow(-1);
 			var noCell = row.insertCell(-1);
@@ -27,8 +28,9 @@ function renderData() {
 			dateCell.innerHTML = item.date;
 			var idCell = row.insertCell(-1);
 			idCell.innerHTML = linkfy(item.id);
+			idCell.setAttribute('class', 'monospace');
 			row.setAttribute('class', item.platform);
-		};
+		}
 		sorttable.makeSortable(contentTable);
 	});
 }
@@ -40,7 +42,7 @@ function toggleRow(rowClass) {
 		rows[i].style.display = toggle ? 'table-row' : 'none';
 		// console.log(rows[i]);
 	}
-};
+}
 
 
 function formatSize(bytes) {
@@ -49,7 +51,7 @@ function formatSize(bytes) {
 	if (bytes > 1048576) return (bytes/1048576).toFixed(2) + ' MB';
 	if (bytes > 1024) return (bytes/1024).toFixed(2) + ' kB';
 	return bytes + ' B';
-};
+}
 
 function linkfy(id) {
 	return '<a href="https://store.playstation.com/#!/cid=' + id + '">' + id + '</a>';
