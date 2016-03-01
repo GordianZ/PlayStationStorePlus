@@ -1,4 +1,4 @@
-chrome.storage.local.clear();
+chrome.storage.local.remove(['entitlements', 'count']);
 if (typeof localStorage['MgrEntitlements|chihiro.entitlements'] !== 'undefined') {
 	// Get raw entitlements string from PSStore local storage
 	var rawEntitlements = JSON.parse(localStorage['MgrEntitlements|chihiro.entitlements']);
@@ -8,24 +8,26 @@ if (typeof localStorage['MgrEntitlements|chihiro.entitlements'] !== 'undefined')
 	})
 	// Save formatted enetitlements to extension storage
 	chrome.storage.local.set({
-		"entitlements": entitlements,
-		"count": entitlements.length
+		'entitlements': entitlements,
+		'count': entitlements.length
 	}, function() {
-		console.log("PSSP: " + entitlements.length + " items saved.");
+		console.log('PSSP: ' + entitlements.length + ' items saved.');
 	});
-};
+} else {
+	console.log('Cannot find local storage of entitlements.');
+}
 
 function parseEntitlement(entitlement) {
 	var platformFlags = [2147483648, 1073741824, 0, 0, 134217728, 0, 0, 0, 0];
-	var platformNames = ["PS3", "PSP", "MediaGo", "Xperia", "PSVita", "Sony Tablet", "BIVL", "Chihiro", "Generic Mobile"];
+	var platformNames = ['PS3', 'PSP', 'MediaGo', 'Xperia', 'PSVita', 'Sony Tablet', 'BIVL', 'Chihiro', 'Generic Mobile'];
 
 	var item = {
-		"name": "__ENTITLEMENT__",
-		"size": 0,
-		"date": entitlement.active_date,
-		"platform": "License",
-		"type": "Entitlement",
-		"id": entitlement.id
+		'name': '__ENTITLEMENT__',
+		'size': 0,
+		'date': entitlement.active_date,
+		'platform': 'License',
+		'type': 'Entitlement',
+		'id': entitlement.id
 	};
 
 	if (entitlement.drm_def) {
@@ -41,24 +43,24 @@ function parseEntitlement(entitlement) {
 	}
 
 	if (entitlement.entitlement_attributes) {
-		item.platform = "PS4";
+		item.platform = 'PS4';
 		item.size = entitlement.entitlement_attributes[0].package_file_size;
 	}
 
 	if (entitlement.game_meta && entitlement.game_meta.type) {
 		item.type = entitlement.game_meta.type;
 		switch (entitlement.game_meta.type) {
-			case "PS4GD":
-				item.type = "Game"
+			case 'PS4GD':
+				item.type = 'Game'
 				break;
-			case "PS4AC":
-				item.type = "DLC"
+			case 'PS4AC':
+				item.type = 'DLC'
 				break;
-			case "PS4AL":
-				item.type = "DLC"
+			case 'PS4AL':
+				item.type = 'DLC'
 				break;
-			case "PS4MISC":
-				item.type = "Extra"
+			case 'PS4MISC':
+				item.type = 'Extra'
 				break;
 		}
 	}
