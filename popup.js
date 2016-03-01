@@ -45,7 +45,7 @@ function renderData() {
 
 function toggleRow(rowClass) {
 	var toggle = document.getElementById('toggle' + rowClass).checked;
-	var rows = document.getElementsByClassName(rowClass);
+	var rows = document.getElementsByClassName('type--' + rowClass.toLowerCase());
 	for (var i = 0; i < rows.length; i++) {
 		rows[i].style.display = toggle ? 'table-row' : 'none';
 		// console.log(rows[i]);
