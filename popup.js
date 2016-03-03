@@ -37,13 +37,12 @@ function renderData() {
 			columns: [1, 2, 3, 5, 6]
 		});
 
-		if (items.toggles) {
-			for (var i = 0; i < checkboxes.length; i++) {
-				checkboxes[i].checked = items.toggles[i];
-				checkboxes[i].addEventListener('change', filterPlatforms);
-			}
-			toggleRows();
+		for (var i = 0; i < checkboxes.length; i++) {
+			checkboxes[i].checked = items.toggles[i];
+			checkboxes[i].addEventListener('change', filterPlatforms);
 		}
+		filterPlatforms();
+		toggleRows();
 	});
 }
 
