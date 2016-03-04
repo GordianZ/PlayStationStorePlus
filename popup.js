@@ -58,7 +58,6 @@ function renderData() {
 			// re-apply table sorting
 			if (items.sortBy) {
 				var tableHead = document.getElementById(items.sortBy);
-				tableHead.className = items.prevClass;
 				sorttable.innerSortFunction.apply(tableHead);
 				if (items.reverseOrder) sorttable.innerSortFunction.apply(tableHead);
 			}
