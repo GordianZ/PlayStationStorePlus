@@ -1,4 +1,3 @@
-chrome.storage.local.remove(['entitlements', 'count']);
 if (typeof localStorage['MgrEntitlements|chihiro.entitlements'] !== 'undefined') {
 	// Get raw entitlements string from PSStore local storage
 	var rawEntitlements = JSON.parse(localStorage['MgrEntitlements|chihiro.entitlements']);
@@ -6,16 +5,22 @@ if (typeof localStorage['MgrEntitlements|chihiro.entitlements'] !== 'undefined')
 	rawEntitlements.forEach(function(rawItem) {
 		entitlements.push(parseEntitlement(rawItem));
 	})
-	// Save formatted enetitlements to extension storage
-	chrome.storage.local.set({
-		'entitlements': entitlements,
-		'count': entitlements.length,
-		'timestamp': Date()
-	}, function() {
-		console.log('PSSP: ' + entitlements.length + ' items saved.');
-	});
+	// Save/update formatted enetitlements to cache only when count changes
+	chrome.storage.local.get(function(items) {
+		if (!(items && items.count && items.count === entitlements.length)) {
+			chrome.storage.local.set({
+				'entitlements': entitlements,
+				'count': entitlements.length,
+				'timestamp': Date()
+			}, function() {
+				console.log('PSSP: ' + entitlements.length + ' items saved.');
+			});
+		}
+	})
 } else {
-	console.log('Cannot find local storage of entitlements.');
+	// cleading cache when user sign out of PSS
+	console.log('PSSP: Cannot find local storage of entitlements. Clearing cache.');
+	chrome.storage.local.remove(['entitlements', 'count', 'timestamp']);
 }
 
 function parseEntitlement(entitlement) {

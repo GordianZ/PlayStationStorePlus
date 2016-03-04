@@ -1,3 +1,6 @@
+var dataView = document.getElementById('dataview');
+var messageView = document.getElementById('messageview');
+
 var contentTable = document.getElementById('content');
 var checkboxes = document.getElementsByClassName('checkbox');
 var ths = document.getElementsByTagName('th');
@@ -7,58 +10,65 @@ for (var i = 0; i < ths.length; i ++) {
 
 function renderData() {
 	// hide table to prevent flashing on loading
-	contentTable.style.display = 'none';
+	dataView.style.display = 'none';
+	messageView.style.display = 'none';
 	chrome.storage.local.get(null, function(items){
-		document.getElementById('number').textContent = items.count;
-		document.getElementById('timestamp').textContent = items.timestamp;
-		for (var i = 0; i < items.count; i++) {
-			var item = items.entitlements[i];
-			var row = contentTable.insertRow(-1);
-			var noCell = row.insertCell(-1);
-			noCell.setAttribute('class', 'no');
-			noCell.innerHTML = i;
-			var nameCell = row.insertCell(-1);
-			nameCell.innerHTML = item.name;
-			var platformCell = row.insertCell(-1);
-			platformCell.innerHTML = item.platform;
-			platformCell.setAttribute('class', 'platform');
-			var typeCell = row.insertCell(-1);
-			typeCell.innerHTML = item.type;
-			var sizeCell = row.insertCell(-1);
-			sizeCell.innerHTML = formatSize(item.size);
-			sizeCell.setAttribute('sorttable_customkey', item.size);
-			var dateCell = row.insertCell(-1);
-			dateCell.innerHTML = item.date;
-			var idCell = row.insertCell(-1);
-			idCell.innerHTML = linkfy(item.id);
-			idCell.setAttribute('class', 'monospace');
-			row.setAttribute('class', 'type--' + item.platform.toLowerCase());
-		}
-		sorttable.makeSortable(contentTable);
+		if (items.count) {
+			document.getElementById('number').textContent = items.count;
+			document.getElementById('timestamp').textContent = items.timestamp;
+			for (var i = 0; i < items.count; i++) {
+				var item = items.entitlements[i];
+				var row = contentTable.insertRow(-1);
+				var noCell = row.insertCell(-1);
+				noCell.setAttribute('class', 'no');
+				noCell.innerHTML = i;
+				var nameCell = row.insertCell(-1);
+				nameCell.innerHTML = item.name;
+				var platformCell = row.insertCell(-1);
+				platformCell.innerHTML = item.platform;
+				platformCell.setAttribute('class', 'platform');
+				var typeCell = row.insertCell(-1);
+				typeCell.innerHTML = item.type;
+				var sizeCell = row.insertCell(-1);
+				sizeCell.innerHTML = formatSize(item.size);
+				sizeCell.setAttribute('sorttable_customkey', item.size);
+				var dateCell = row.insertCell(-1);
+				dateCell.innerHTML = item.date;
+				var idCell = row.insertCell(-1);
+				idCell.innerHTML = linkfy(item.id);
+				idCell.setAttribute('class', 'monospace');
+				row.setAttribute('class', 'type--' + item.platform.toLowerCase());
+			}
+			sorttable.makeSortable(contentTable);
 
-		var jets = new Jets({
-			searchTag: '#inputSearch',
-			contentTag: '#content > tbody',
-			columns: [1, 2, 3, 5, 6]
-		});
+			var jets = new Jets({
+				searchTag: '#inputSearch',
+				contentTag: '#content > tbody',
+				columns: [1]
+			});
 
-		// re-apply platform filter
-		if (items.toggles) {
+			// re-apply platform filter
 			for (var i = 0; i < checkboxes.length; i++) {
-				checkboxes[i].checked = items.toggles[i];
+				if (items.toggles) {
+					checkboxes[i].checked = items.toggles[i];
+				}
 				checkboxes[i].addEventListener('change', filterPlatforms);
 			}
-		}
 
-		// re-apply table sorting
-		if (items.sortBy) {
-			var tableHead = document.getElementById(items.sortBy);
-			tableHead.className = items.prevClass;
-			sorttable.innerSortFunction.apply(tableHead);
-			if (items.reverseOrder) sorttable.innerSortFunction.apply(tableHead);
-		}
+			// re-apply table sorting
+			if (items.sortBy) {
+				var tableHead = document.getElementById(items.sortBy);
+				tableHead.className = items.prevClass;
+				sorttable.innerSortFunction.apply(tableHead);
+				if (items.reverseOrder) sorttable.innerSortFunction.apply(tableHead);
+			}
 
-		filterPlatforms();
+			filterPlatforms();
+		}
+		// No items in cache, show guiding message
+		else {
+			messageView.style.display = '';
+		}
 	});
 }
 
@@ -80,12 +90,12 @@ function toggleRows() {
 			rows[i].style.display = toggle ? '' : 'none';
 		}
 		// show table after sortig (prevent flashing on loading)
-		contentTable.style.display = '';
+		dataView.style.display = '';
 	});
 }
 
 function saveSorting() {
-	chrome.storage.local.set({'sortBy': this.id, 'reverseOrder': this.classList.contains("sorttable_sorted")});
+	chrome.storage.local.set({'sortBy': this.id, 'reverseOrder': this.classList.contains('sorttable_sorted')});
 }
 
 function formatSize(bytes) {
@@ -99,5 +109,11 @@ function formatSize(bytes) {
 function linkfy(id) {
 	return '<a href="https://store.playstation.com/#!/cid=' + id + '">' + id + '</a>';
 }
+
+chrome.storage.onChanged.addListener(function(changes, namespace) {
+	if (namespace === 'local' && changes['count']) {
+		location.reload();
+	}
+});
 
 renderData();

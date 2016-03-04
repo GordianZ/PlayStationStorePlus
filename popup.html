@@ -6,33 +6,40 @@
 		<link rel="stylesheet" href="style.css">
 	</head>
 <body>
-  <div>Total number: <em id="number"></em>, updated on <em id="timestamp"></em></div>
-	<div>
-		<input type="search" id="inputSearch" placeholder="Filter result…">
+	<div id="dataview">
+		<div>Total number: <em id="number"></em>, updated on <em id="timestamp"></em></div>
+		<div>
+			<input type="search" id="inputSearch" placeholder="Filter by name…">
+		</div>
+		<div>
+			<input type="checkbox" class="checkbox" id="toggleLicense" checked="true">
+			<label for="toggleLicense">Show Internal License</label>
+			<input type="checkbox" class="checkbox" id="togglePS4" checked="true">
+			<label for="togglePS4">Show PS4</label>
+			<input type="checkbox" class="checkbox" id="togglePS3" checked="true">
+			<label for="togglePS3">Show PS3</label>
+			<input type="checkbox" class="checkbox" id="togglePSVita" checked="true">
+			<label for="togglePSVita">Show PSVita</label>
+			<input type="checkbox" class="checkbox" id="togglePSP" checked="true">
+			<label for="togglePSP">Show PSP</label>
+		</div>
+	  <table id="content">
+			<tr>
+				<th id="th-no">#</th id="th-">
+				<th id="th-name">Name</th id="th-">
+				<th id="th-platform">Platform</th id="th-">
+				<th id="th-type">Type</th id="th-">
+				<th id="th-size">Size</th id="th-">
+				<th id="th-date">Date</th id="th-">
+				<th id="th-id">ID</th id="th-">
+			</tr>
+	  </table>
 	</div>
-	<div>
-		<input type="checkbox" class="checkbox" id="toggleLicense" checked="true">
-		<label for="toggleLicense">Show Internal License</label>
-		<input type="checkbox" class="checkbox" id="togglePS4" checked="true">
-		<label for="togglePS4">Show PS4</label>
-		<input type="checkbox" class="checkbox" id="togglePS3" checked="true">
-		<label for="togglePS3">Show PS3</label>
-		<input type="checkbox" class="checkbox" id="togglePSVita" checked="true">
-		<label for="togglePSVita">Show PSVita</label>
-		<input type="checkbox" class="checkbox" id="togglePSP" checked="true">
-		<label for="togglePSP">Show PSP</label>
+	<div id="messageview">
+		<p>
+			Entitlement data not found. Please <a href="https://store.playstation.com" target="_blank">log in PlayStation Store</a> to view your content list.
+		</p>
 	</div>
-  <table id="content">
-		<tr>
-			<th id="th-no">#</th id="th-">
-			<th id="th-name">Name</th id="th-">
-			<th id="th-platform">Platform</th id="th-">
-			<th id="th-type">Type</th id="th-">
-			<th id="th-size">Size</th id="th-">
-			<th id="th-date">Date</th id="th-">
-			<th id="th-id">ID</th id="th-">
-		</tr>
-  </table>
 <script src="popup.js"></script>
 </body>
 </html>
