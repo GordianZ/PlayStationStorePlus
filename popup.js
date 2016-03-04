@@ -1,9 +1,13 @@
 var contentTable = document.getElementById('content');
 var checkboxes = document.getElementsByClassName('checkbox');
-
-// document.getElementById('refresh').onclick = renderData();
+var ths = document.getElementsByTagName('th');
+for (var i = 0; i < ths.length; i ++) {
+	ths[i].addEventListener('click', saveSorting);
+}
 
 function renderData() {
+	// hide table to prevent flashing on loading
+	contentTable.style.display = 'none';
 	chrome.storage.local.get(null, function(items){
 		document.getElementById('number').textContent = items.count;
 		for (var i = 0; i < items.count; i++) {
@@ -37,12 +41,22 @@ function renderData() {
 			columns: [1, 2, 3, 5, 6]
 		});
 
+		// re-apply platform filter
 		if (items.toggles) {
 			for (var i = 0; i < checkboxes.length; i++) {
 				checkboxes[i].checked = items.toggles[i];
 				checkboxes[i].addEventListener('change', filterPlatforms);
 			}
 		}
+
+		// re-apply table sorting
+		if (items.sortBy) {
+			var tableHead = document.getElementById(items.sortBy);
+			tableHead.className = items.prevClass;
+			sorttable.innerSortFunction.apply(tableHead);
+			if (items.reverseOrder) sorttable.innerSortFunction.apply(tableHead);
+		}
+
 		filterPlatforms();
 	});
 }
@@ -52,26 +66,25 @@ function filterPlatforms() {
 	for (var i = 0; i < checkboxes.length; i++) {
 		checkboxVals.push(checkboxes[i].checked);
 	}
-	console.log(checkboxVals);
 	chrome.storage.local.set({'toggles': checkboxVals});
 	toggleRows();
 }
 
 function toggleRows() {
 	chrome.storage.local.get('toggles', function(platform) {
-		if (chrome.runtime.lastError) {
-			console.log(chrome.runtime.lastError.message);
-			return;
-		}
 		var platformClasses = ['type--license', 'type--ps4', 'type--ps3', 'type--psvita', 'type--psp'];
 		var rows = document.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
-		console.log(rows.length);
 		for (var i = 0; i < rows.length; i++) {
 			var toggle = platform.toggles[platformClasses.indexOf(rows[i].className)];
 			rows[i].style.display = toggle ? '' : 'none';
-			// console.log(rows[i]);
 		}
+		// show table after sortig (prevent flashing on loading)
+		contentTable.style.display = '';
 	});
+}
+
+function saveSorting() {
+	chrome.storage.local.set({'sortBy': this.id, 'reverseOrder': this.classList.contains("sorttable_sorted")});
 }
 
 function formatSize(bytes) {
