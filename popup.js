@@ -10,6 +10,7 @@ function renderData() {
 	contentTable.style.display = 'none';
 	chrome.storage.local.get(null, function(items){
 		document.getElementById('number').textContent = items.count;
+		document.getElementById('timestamp').textContent = items.timestamp;
 		for (var i = 0; i < items.count; i++) {
 			var item = items.entitlements[i];
 			var row = contentTable.insertRow(-1);

@@ -9,7 +9,8 @@ if (typeof localStorage['MgrEntitlements|chihiro.entitlements'] !== 'undefined')
 	// Save formatted enetitlements to extension storage
 	chrome.storage.local.set({
 		'entitlements': entitlements,
-		'count': entitlements.length
+		'count': entitlements.length,
+		'timestamp': Date()
 	}, function() {
 		console.log('PSSP: ' + entitlements.length + ' items saved.');
 	});
