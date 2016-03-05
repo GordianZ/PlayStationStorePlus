@@ -8,9 +8,9 @@
     "storage",
 		"https://store.playstation.com/*"
   ],
-  "page_action": {
+  "browser_action": {
     "default_title": "PlayStation Store Plus",
-    "default_icon": "icon-19.png"
+    "default_icon": "icon-128.png"
   },
   "background": {
 	"scripts": ["background.js"],
