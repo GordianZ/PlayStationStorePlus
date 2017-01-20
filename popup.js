@@ -38,6 +38,7 @@ function renderData() {
 				idCell.innerHTML = linkfy(item.id);
 				idCell.setAttribute('class', 'monospace');
 				row.setAttribute('class', 'type--' + item.platform.toLowerCase());
+				row.setAttribute('data-type', 'type--' + item.type.toLowerCase());
 			}
 			sorttable.makeSortable(contentTable);
 
@@ -82,10 +83,10 @@ function filterPlatforms() {
 
 function toggleRows() {
 	chrome.storage.local.get('toggles', function(platform) {
-		var platformClasses = ['type--license', 'type--ps4', 'type--ps3', 'type--psvita', 'type--psp'];
+		var platformClasses = ['type--license', 'type--ps4', 'type--ps3', 'type--psvita', 'type--psp', 'type--game', 'type--dlc', 'type--extra'];
 		var rows = document.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
 		for (var i = 0; i < rows.length; i++) {
-			var toggle = platform.toggles[platformClasses.indexOf(rows[i].className)];
+			var toggle = platform.toggles[platformClasses.indexOf(rows[i].className)] && platform.toggles[platformClasses.indexOf(rows[i].getAttribute('data-type'))];
 			rows[i].style.display = toggle ? '' : 'none';
 		}
 		// show table after sortig (prevent flashing on loading)
