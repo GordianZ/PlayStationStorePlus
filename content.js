@@ -42,6 +42,7 @@ function parseEntitlement(entitlement) {
 		platformFlags.forEach(function(flag, index) {
 			if (entitlement.drm_def.drmContents[0].platformIds & flag) {
 				item.platform = (platformNames[index]);
+				item.type = 'Game'
 			}
 		});
 	} else if (entitlement.game_meta) {
