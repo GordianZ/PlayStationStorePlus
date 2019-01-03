@@ -1,18 +1,23 @@
-if (typeof localStorage['MgrEntitlements|chihiro.entitlements'] !== 'undefined') {
+if (storageHasEntitlement()) {
 	// Get raw entitlements string from PSStore local storage
-	var rawEntitlements = JSON.parse(localStorage['MgrEntitlements|chihiro.entitlements']);
 	var entitlements = [];
-	rawEntitlements.forEach(function(rawItem) {
-		entitlements.push(parseEntitlement(rawItem));
-	})
+	for (i = 0; i < localStorage.length; i++) {
+		var key = localStorage.key(i);
+		if (key.startsWith('entitlements_')) {
+			var rawEntitlements = JSON.parse(localStorage[key]);
+			rawEntitlements.forEach(function (rawItem) {
+				entitlements.push(parseEntitlement(rawItem));
+			})
+		}
+	}
 	// Save/update formatted enetitlements to cache only when count changes
-	chrome.storage.local.get(function(items) {
+	chrome.storage.local.get(function (items) {
 		if (!(items && items.count && items.count === entitlements.length)) {
 			chrome.storage.local.set({
 				'entitlements': entitlements,
 				'count': entitlements.length,
 				'timestamp': Date()
-			}, function() {
+			}, function () {
 				console.log('PSSP: ' + entitlements.length + ' items saved.');
 			});
 		}
@@ -33,13 +38,14 @@ function parseEntitlement(entitlement) {
 		'date': entitlement.active_date,
 		'platform': 'License',
 		'type': 'Entitlement',
-		'id': entitlement.id
+		'id': entitlement.id,
+		'plus': false
 	};
 
 	if (entitlement.drm_def) {
 		item.name = entitlement.drm_def.contentName;
 		item.size = entitlement.drm_def.drmContents[0].contentSize;
-		platformFlags.forEach(function(flag, index) {
+		platformFlags.forEach(function (flag, index) {
 			if (entitlement.drm_def.drmContents[0].platformIds & flag) {
 				item.platform = (platformNames[index]);
 				item.type = 'Game'
@@ -72,5 +78,14 @@ function parseEntitlement(entitlement) {
 		}
 	}
 
+	if (entitlement.license && entitlement.license.expiration) item.plus = true;
+	if (entitlement.inactive_date && item.platform == 'PS4') item.plus = true;
 	return item;
+}
+
+function storageHasEntitlement() {
+	for (let index = 0; index < localStorage.length; index++) {
+		if (localStorage.key(index).includes('entitlements_')) return true;
+	}
+	return false;
 }

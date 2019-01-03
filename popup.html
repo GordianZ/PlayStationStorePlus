@@ -1,13 +1,16 @@
 <html>
-	<head>
-		<title>PlayStation Store Plus</title>
-		<script src="vendors/sorttable.js"></script>
-		<script src="vendors/jets.min.js"></script>
-		<link rel="stylesheet" href="style.css">
-	</head>
+
+<head>
+	<title>PlayStation Store Plus</title>
+	<script src="vendors/sorttable.js"></script>
+	<script src="vendors/jets.min.js"></script>
+	<link rel="stylesheet" href="style.css">
+</head>
+
 <body>
 	<div id="dataview">
-		<div>Total number: <em id="number"></em>, updated on <em id="timestamp"></em></div>
+		<div>Total number: <em id="number"></em>, updated on <em id="timestamp"></em> <button id="reset">Clear cache</button>
+		</div>
 		<div>
 			<input type="search" id="inputSearch" placeholder="Filter by name…">
 		</div>
@@ -29,23 +32,26 @@
 			<input type="checkbox" class="checkbox" id="toggleExtra" checked="true">
 			<label for="toggleExtra">Show Extra</label>
 		</div>
-	  <table id="content">
+		<table id="content">
 			<tr>
-				<th id="th-no">#</th id="th-">
-				<th id="th-name">Name</th id="th-">
-				<th id="th-platform">Platform</th id="th-">
-				<th id="th-type">Type</th id="th-">
-				<th id="th-size">Size</th id="th-">
-				<th id="th-date">Date</th id="th-">
-				<th id="th-id">ID</th id="th-">
+				<th id="th-no">#</th>
+				<th id="th-plus">PS+</th>
+				<th id="th-name" class="sorttable_alpha">Name</th>
+				<th id="th-platform">Platform</th>
+				<th id="th-type">Type</th>
+				<th id="th-size">Size</th>
+				<th id="th-date">Date</th>
+				<!-- <th id="th-id">ID</th> -->
 			</tr>
-	  </table>
+		</table>
 	</div>
 	<div id="messageview">
 		<p>
-			Entitlement data not found. Please <a href="https://store.playstation.com" target="_blank">log in PlayStation Store</a> to view your content list.
+			Entitlement data not found. Please <a href="https://store.playstation.com" target="_blank">log in PlayStation Store</a>
+			to view your content list.
 		</p>
 	</div>
-<script src="popup.js"></script>
+	<script src="popup.js"></script>
 </body>
+
 </html>

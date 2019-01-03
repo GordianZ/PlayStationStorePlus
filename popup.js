@@ -4,15 +4,19 @@ var messageView = document.getElementById('messageview');
 var contentTable = document.getElementById('content');
 var checkboxes = document.getElementsByClassName('checkbox');
 var ths = document.getElementsByTagName('th');
-for (var i = 0; i < ths.length; i ++) {
+for (var i = 0; i < ths.length; i++) {
 	ths[i].addEventListener('click', saveSorting);
+}
+var reset = document.getElementById('reset');
+reset.onclick = function resetCache(event) {
+	chrome.storage.local.clear();
 }
 
 function renderData() {
 	// hide table to prevent flashing on loading
 	dataView.style.display = 'none';
 	messageView.style.display = 'none';
-	chrome.storage.local.get(null, function(items){
+	chrome.storage.local.get(null, function (items) {
 		if (items.count) {
 			document.getElementById('number').textContent = items.count;
 			document.getElementById('timestamp').textContent = items.timestamp;
@@ -22,8 +26,11 @@ function renderData() {
 				var noCell = row.insertCell(-1);
 				noCell.setAttribute('class', 'no');
 				noCell.innerHTML = i;
+				var plusCell = row.insertCell(-1);
+				if (item.plus) plusCell.innerHTML = '🎁';
 				var nameCell = row.insertCell(-1);
-				nameCell.innerHTML = item.name;
+				nameCell.innerHTML = linkfy(item.id, item.name);
+				// nameCell.setAttribute('sorttable_customkey', item.name);
 				var platformCell = row.insertCell(-1);
 				platformCell.innerHTML = item.platform;
 				platformCell.setAttribute('class', 'platform');
@@ -34,9 +41,9 @@ function renderData() {
 				sizeCell.setAttribute('sorttable_customkey', item.size);
 				var dateCell = row.insertCell(-1);
 				dateCell.innerHTML = item.date;
-				var idCell = row.insertCell(-1);
-				idCell.innerHTML = linkfy(item.id);
-				idCell.setAttribute('class', 'monospace');
+				// var idCell = row.insertCell(-1);
+				// idCell.innerHTML = linkfy(item.id);
+				// idCell.setAttribute('class', 'monospace');
 				row.setAttribute('class', 'type--' + item.platform.toLowerCase());
 				row.setAttribute('data-type', 'type--' + item.type.toLowerCase());
 			}
@@ -45,7 +52,7 @@ function renderData() {
 			var jets = new Jets({
 				searchTag: '#inputSearch',
 				contentTag: '#content > tbody',
-				columns: [1]
+				columns: [2]
 			});
 
 			// re-apply platform filter
@@ -77,12 +84,12 @@ function filterPlatforms() {
 	for (var i = 0; i < checkboxes.length; i++) {
 		checkboxVals.push(checkboxes[i].checked);
 	}
-	chrome.storage.local.set({'toggles': checkboxVals});
+	chrome.storage.local.set({ 'toggles': checkboxVals });
 	toggleRows();
 }
 
 function toggleRows() {
-	chrome.storage.local.get('toggles', function(platform) {
+	chrome.storage.local.get('toggles', function (platform) {
 		var platformClasses = ['type--license', 'type--ps4', 'type--ps3', 'type--psvita', 'type--psp', 'type--game', 'type--dlc', 'type--extra'];
 		var rows = document.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
 		for (var i = 0; i < rows.length; i++) {
@@ -95,22 +102,23 @@ function toggleRows() {
 }
 
 function saveSorting() {
-	chrome.storage.local.set({'sortBy': this.id, 'reverseOrder': this.classList.contains('sorttable_sorted')});
+	chrome.storage.local.set({ 'sortBy': this.id, 'reverseOrder': this.classList.contains('sorttable_sorted') });
 }
 
 function formatSize(bytes) {
 	if (typeof bytes !== 'number') return bytes;
-	if (bytes > 1073741824) return (bytes/1073741824).toFixed(2) + ' GB';
-	if (bytes > 1048576) return (bytes/1048576).toFixed(2) + ' MB';
-	if (bytes > 1024) return (bytes/1024).toFixed(2) + ' kB';
+	if (bytes > 1073741824) return (bytes / 1073741824).toFixed(2) + ' GB';
+	if (bytes > 1048576) return (bytes / 1048576).toFixed(2) + ' MB';
+	if (bytes > 1024) return (bytes / 1024).toFixed(2) + ' kB';
 	return bytes + ' B';
 }
 
-function linkfy(id) {
-	return '<a href="https://store.playstation.com/#!/cid=' + id + '">' + id + '</a>';
+function linkfy(id, name) {
+	name = name || id;
+	return '<a href="https://store.playstation.com/#!/cid=' + id + '">' + name + '</a>';
 }
 
-chrome.storage.onChanged.addListener(function(changes, namespace) {
+chrome.storage.onChanged.addListener(function (changes, namespace) {
 	if (namespace === 'local' && changes['count']) {
 		location.reload();
 	}
